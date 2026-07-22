@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#11101d" />
+  <title>TOE RHYTHM｜足指グーチョキパートレーニング</title>
+  <style>
+    :root {
+      --bg: #0d0c16;
+      --panel: #1b192c;
+      --panel-2: #24213a;
+      --text: #f7f5ff;
+      --muted: #aaa6bf;
+      --line: rgba(255,255,255,.11);
+      --goo: #2f8cff;
+      --choki: #ffd84a;
+      --paa: #ff5f8f;
+      --accent: #8f7cff;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+                   "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      overflow-x: hidden;
+    }
+
+    button, select, input { font: inherit; }
+    button { color: inherit; }
+
+    .app {
+      width: min(100%, 520px);
+      min-height: 100dvh;
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto auto minmax(250px, 1fr) auto auto;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(143,124,255,.18), transparent 35%),
+        var(--bg);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(13,12,22,.88);
+      backdrop-filter: blur(14px);
+      position: relative;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #7565ff, #a991ff);
+      box-shadow: 0 8px 24px rgba(117,101,255,.3);
+      font-size: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.15;
+      letter-spacing: .04em;
+    }
+
+    .subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.05);
+      cursor: pointer;
+    }
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .time {
+      font-variant-numeric: tabular-nums;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .mini-stat {
+      text-align: right;
+      min-width: 56px;
+    }
+
+    .mini-stat b {
+      display: block;
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .stage {
+      position: relative;
+      overflow: hidden;
+      min-height: 290px;
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        radial-gradient(circle at 70% 25%, rgba(47,140,255,.12), transparent 25%),
+        radial-gradient(circle at 25% 75%, rgba(255,95,143,.1), transparent 28%),
+        #11101d;
+      background-size: 32px 32px, 32px 32px, auto, auto, auto;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(13,12,22,.4), transparent 22%, transparent 78%, rgba(13,12,22,.55));
+    }
+
+    .lane {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 43%;
+      height: 96px;
+      transform: translateY(-50%);
+      border-top: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.025);
+    }
+
+    .target {
+      position: absolute;
+      left: 26px;
+      top: 50%;
+      width: 74px;
+      height: 74px;
+      transform: translateY(-50%);
+      border: 4px solid #ffe279;
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 6px rgba(255,226,121,.12),
+        0 0 26px rgba(255,226,121,.24);
+      z-index: 3;
+    }
+
+    .target::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+    }
+
+    .target.pulse {
+      animation: targetPulse .24s ease-out;
+    }
+
+    @keyframes targetPulse {
+      50% { transform: translateY(-50%) scale(1.16); filter: brightness(1.5); }
+    }
+
+    .hit-line {
+      position: absolute;
+      left: 62px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(transparent, rgba(255,226,121,.7), transparent);
+      opacity: .7;
+      z-index: 2;
+    }
+
+    .note {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 66px;
+      height: 66px;
+      margin-top: -33px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: #fff;
+      border: 3px solid rgba(255,255,255,.9);
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+      z-index: 4;
+      will-change: transform;
+    }
+
+    .note.goo { background: var(--goo); }
+    .note.choki { background: var(--choki); color: #2a2510; }
+    .note.paa { background: var(--paa); }
+
+    .beat-dots {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 9px;
+      z-index: 5;
+    }
+
+    .beat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      transition: transform .08s, background .08s;
+    }
+
+    .beat-dot.on {
+      transform: scale(1.6);
+      background: #fff;
+    }
+
+    .cue-card {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 18px;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .cue-prefix {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cue-word {
+      margin-top: 2px;
+      font-size: clamp(42px, 12vw, 66px);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: .03em;
+      text-shadow: 0 7px 30px rgba(0,0,0,.45);
+    }
+
+    .cue-word.goo { color: var(--goo); }
+    .cue-word.choki { color: var(--choki); }
+    .cue-word.paa { color: var(--paa); }
+
+    .foot-badge {
+      min-width: 76px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(27,25,44,.86);
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+    }
+
+    .flash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .flash.show {
+      animation: flash .3s ease-out;
+    }
+
+    @keyframes flash {
+      0% { opacity: .26; }
+      100% { opacity: 0; }
+    }
+
+    .controls {
+      padding: 12px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .primary-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .start-btn {
+      min-height: 54px;
+      border: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6556ff, #9f78ff);
+      box-shadow: 0 12px 30px rgba(101,86,255,.28);
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .start-btn.running {
+      background: linear-gradient(135deg, #ff4f76, #ff7b59);
+      box-shadow: 0 12px 30px rgba(255,79,118,.22);
+    }
+
+    .tap-toggle {
+      min-width: 94px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-2);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tap-toggle.on {
+      outline: 2px solid rgba(143,124,255,.75);
+      background: rgba(143,124,255,.18);
+    }
+
+    .settings {
+      margin-top: 11px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    label.setting {
+      display: block;
+      min-width: 0;
+    }
+
+    .setting span {
+      display: block;
+      margin: 0 0 5px 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    select {
+      width: 100%;
+      height: 40px;
+      padding: 0 9px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #151323;
+      outline: none;
+    }
+
+    .bpm-wrap {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 44px 1fr 50px;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .bpm-wrap span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+    .bpm-value {
+      text-align: right;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .answer-pad {
+      padding: 11px 16px calc(12px + var(--safe-bottom));
+      background: #11101d;
+    }
+
+    .answer-hint {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .answer {
+      min-height: 54px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,.14);
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .08s, filter .08s;
+    }
+
+    .answer:active { transform: scale(.96); filter: brightness(1.2); }
+    .answer.goo { background: rgba(47,140,255,.18); color: #79b7ff; }
+    .answer.choki { background: rgba(255,216,74,.16); color: #ffe57c; }
+    .answer.paa { background: rgba(255,95,143,.17); color: #ff91b2; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(94px + var(--safe-bottom));
+      transform: translate(-50%, 16px);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.82);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s;
+      z-index: 30;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .help {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      padding: 24px 18px;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(12px);
+      overflow: auto;
+    }
+
+    .help.open { display: grid; place-items: center; }
+
+    .help-card {
+      width: min(100%, 460px);
+      padding: 20px;
+      border-radius: 22px;
+      background: #1c192c;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    }
+
+    .help-card h2 { margin: 0 0 12px; font-size: 20px; }
+    .help-card p, .help-card li { color: #d2cee0; line-height: 1.7; font-size: 13px; }
+    .help-card ul { padding-left: 20px; }
+    .close-help {
+      width: 100%;
+      height: 46px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 13px;
+      background: #7262ff;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    @media (min-width: 700px) {
+      body { padding: 20px; }
+      .app {
+        min-height: calc(100dvh - 40px);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 30px 100px rgba(0,0,0,.45);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app" aria-label="足指グーチョキパートレーニング">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">🦶</div>
+        <div>
+          <h1>TOE RHYTHM</h1>
+          <div class="subtitle">音に合わせて足指グーチョキパー</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="helpBtn" aria-label="使い方">?</button>
+    </header>
+
+    <section class="status-bar" aria-label="トレーニング状況">
+      <div class="time" id="timeDisplay">01:00</div>
+      <div class="mini-stat"><b id="scoreDisplay">0</b><span>スコア</span></div>
+      <div class="mini-stat"><b id="comboDisplay">0</b><span>コンボ</span></div>
+    </section>
+
+    <section class="stage" id="stage">
+      <div class="beat-dots" aria-hidden="true">
+        <i class="beat-dot"></i><i class="beat-dot"></i><i class="beat-dot"></i><i class="beat-dot"></i>
+      </div>
+      <div class="lane" id="lane">
+        <div class="hit-line"></div>
+        <div class="target" id="target"></div>
+      </div>
+
+      <div class="cue-card">
+        <div>
+          <div class="cue-prefix" id="cuePrefix">スタートを押してください</div>
+          <div class="cue-word goo" id="cueWord">グー</div>
+        </div>
+        <div class="foot-badge" id="footBadge">両足</div>
+      </div>
+      <div class="flash" id="flash"></div>
+    </section>
+
+    <section class="controls">
+      <div class="primary-row">
+        <button class="start-btn" id="startBtn">▶ トレーニング開始</button>
+        <button class="tap-toggle" id="tapToggle" aria-pressed="true">採点 ON</button>
+      </div>
+
+      <div class="settings">
+        <label class="setting">
+          <span>難易度</span>
+          <select id="difficulty">
+            <option value="easy">ゆっくり</option>
+            <option value="normal" selected>標準</option>
+            <option value="hard">ハード</option>
+          </select>
+        </label>
+
+        <label class="setting">
+          <span>時間</span>
+          <select id="duration">
+            <option value="30">30秒</option>
+            <option value="60" selected>1分</option>
+            <option value="120">2分</option>
+            <option value="180">3分</option>
+            <option value="0">無制限</option>
+          </select>
+        </label>
+
+        <label class="setting">
+          <span>足の指定</span>
+          <select id="footMode">
+            <option value="both" selected>両足</option>
+            <option value="random">左右ランダム</option>
+            <option value="all">左・右・両足</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="settings">
+        <label class="setting">
+          <span>BGM</span>
+          <select id="soundMode">
+            <option value="beat" selected>リズムビート</option>
+            <option value="click">メトロノーム</option>
+            <option value="off">音なし</option>
+          </select>
+        </label>
+
+        <label class="setting">
+          <span>合図</span>
+          <select id="cueMode">
+            <option value="random" selected>ランダム</option>
+            <option value="noRepeat">連続なし</option>
+          </select>
+        </label>
+
+        <label class="setting">
+          <span>画面</span>
+          <select id="screenMode">
+            <option value="normal" selected>通常</option>
+            <option value="wake">消灯防止</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="bpm-wrap">
+        <span>BPM</span>
+        <input id="bpm" type="range" min="60" max="160" value="100" step="1" />
+        <div class="bpm-value" id="bpmValue">100</div>
+      </div>
+    </section>
+
+    <section class="answer-pad" id="answerPad">
+      <div class="answer-hint">合図が黄色い円に重なった瞬間に、同じボタンをタップ（採点しなくても練習できます）</div>
+      <div class="answers">
+        <button class="answer goo" data-type="goo">グー</button>
+        <button class="answer choki" data-type="choki">チョキ</button>
+        <button class="answer paa" data-type="paa">パー</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="help" id="help">
+    <div class="help-card">
+      <h2>使い方</h2>
+      <p>右から流れてくる「グー・チョキ・パー」が黄色い円に重なるタイミングで、足指の形を作ります。</p>
+      <ul>
+        <li><b>グー：</b>足指を丸める</li>
+        <li><b>チョキ：</b>親指とほかの指を別々に動かす</li>
+        <li><b>パー：</b>足指をできる範囲で広げる</li>
+      </ul>
+      <p>採点ONでは画面下のボタンを同じタイミングで押すと、タイミングと正解を採点します。痛みやつりが出たら中止してください。</p>
+      <button class="close-help" id="closeHelp">閉じる</button>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+    const els = {
+      startBtn: $("startBtn"),
+      tapToggle: $("tapToggle"),
+      difficulty: $("difficulty"),
+      duration: $("duration"),
+      footMode: $("footMode"),
+      soundMode: $("soundMode"),
+      cueMode: $("cueMode"),
+      screenMode: $("screenMode"),
+      bpm: $("bpm"),
+      bpmValue: $("bpmValue"),
+      time: $("timeDisplay"),
+      score: $("scoreDisplay"),
+      combo: $("comboDisplay"),
+      cuePrefix: $("cuePrefix"),
+      cueWord: $("cueWord"),
+      footBadge: $("footBadge"),
+      lane: $("lane"),
+      target: $("target"),
+      flash: $("flash"),
+      toast: $("toast"),
+      answerPad: $("answerPad"),
+      help: $("help"),
+      helpBtn: $("helpBtn"),
+      closeHelp: $("closeHelp")
+    };
+
+    const TYPES = {
+      goo:   { label: "グー", color: "#2f8cff", className: "goo", tone: 440 },
+      choki: { label: "チョキ", color: "#ffd84a", className: "choki", tone: 554.37 },
+      paa:   { label: "パー", color: "#ff5f8f", className: "paa", tone: 659.25 }
+    };
+
+    const DIFFICULTY = {
+      easy:   { travel: 2600, gaps: [3, 4, 4, 5, 6] },
+      normal: { travel: 1900, gaps: [2, 2, 3, 3, 4] },
+      hard:   { travel: 1350, gaps: [1, 2, 2, 3] }
+    };
+
+    let audio = null;
+    let master = null;
+    let running = false;
+    let tapScoring = true;
+    let schedulerTimer = null;
+    let countdownTimer = null;
+    let nextTickTime = 0;
+    let tickIndex = 0;
+    let nextCueTime = 0;
+    let endAtPerf = 0;
+    let startPerf = 0;
+    let score = 0;
+    let combo = 0;
+    let cueId = 0;
+    let lastType = null;
+    let pendingCues = [];
+    let wakeLock = null;
+    let toastTimer = null;
+
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds)) return "∞";
+      const s = Math.max(0, Math.ceil(seconds));
+      return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+    }
+
+    function showToast(text) {
+      els.toast.textContent = text;
+      els.toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 850);
+    }
+
+    function setCueDisplay(type, foot, prefix = "いま") {
+      const meta = TYPES[type];
+      els.cuePrefix.textContent = prefix;
+      els.cueWord.textContent = meta.label;
+      els.cueWord.className = "cue-word " + meta.className;
+      els.footBadge.textContent = foot;
+    }
+
+    function chooseType() {
+      const keys = Object.keys(TYPES);
+      let type = randomItem(keys);
+      if (els.cueMode.value === "noRepeat" && type === lastType) {
+        type = randomItem(keys.filter(k => k !== lastType));
+      } else if (type === lastType && Math.random() > 0.25) {
+        type = randomItem(keys.filter(k => k !== lastType));
+      }
+      lastType = type;
+      return type;
+    }
+
+    function chooseFoot() {
+      const mode = els.footMode.value;
+      if (mode === "both") return "両足";
+      if (mode === "random") return randomItem(["左足", "右足"]);
+      return randomItem(["左足", "右足", "両足"]);
+    }
+
+    async function ensureAudio() {
+      if (!audio) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audio = new AudioCtx();
+        master = audio.createGain();
+        master.gain.value = 0.45;
+        master.connect(audio.destination);
+      }
+      if (audio.state === "suspended") await audio.resume();
+    }
+
+    function oscillator(time, frequency, duration, volume, type = "sine") {
+      if (!audio || !master) return;
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(frequency, time);
+      gain.gain.setValueAtTime(0.0001, time);
+      gain.gain.exponentialRampToValueAtTime(volume, time + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(time);
+      osc.stop(time + duration + 0.03);
+    }
+
+    function noise(time, duration, volume, highpass = 5000) {
+      if (!audio || !master) return;
+      const length = Math.max(1, Math.floor(audio.sampleRate * duration));
+      const buffer = audio.createBuffer(1, length, audio.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+
+      const source = audio.createBufferSource();
+      const filter = audio.createBiquadFilter();
+      const gain = audio.createGain();
+      filter.type = "highpass";
+      filter.frequency.value = highpass;
+      gain.gain.setValueAtTime(volume, time);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+      source.buffer = buffer;
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(master);
+      source.start(time);
+    }
+
+    function playTick(time, index) {
+      const mode = els.soundMode.value;
+      if (mode === "off") return;
+
+      const sub = index % 8;
+      if (mode === "click") {
+        oscillator(time, sub === 0 ? 1100 : 780, 0.045, sub === 0 ? 0.16 : 0.075, "square");
+        return;
+      }
+
+      // 4/4の簡単な電子ビート
+      noise(time, 0.035, sub % 2 === 0 ? 0.045 : 0.025, 6500); // hi-hat
+
+      if (sub === 0 || sub === 4) {
+        oscillator(time, 145, 0.12, 0.22, "sine");
+        oscillator(time, 58, 0.16, 0.19, "sine");
+      }
+      if (sub === 2 || sub === 6) {
+        noise(time, 0.11, 0.13, 1200);
+        oscillator(time, 190, 0.08, 0.06, "triangle");
+      }
+
+      if (sub === 0) {
+        const bar = Math.floor(index / 8);
+        const bass = [110, 130.81, 146.83, 123.47][bar % 4];
+        oscillator(time, bass, 0.34, 0.075, "triangle");
+      }
+    }
+
+    function playCueTone(type, when = null) {
+      if (!audio || els.soundMode.value === "off") return;
+      const t = when ?? audio.currentTime;
+      oscillator(t, TYPES[type].tone, 0.11, 0.08, "sine");
+      oscillator(t, TYPES[type].tone * 2, 0.07, 0.025, "triangle");
+    }
+
+    function animateBeat(index, time) {
+      const delay = Math.max(0, (time - audio.currentTime) * 1000);
+      setTimeout(() => {
+        if (!running) return;
+        const dots = document.querySelectorAll(".beat-dot");
+        dots.forEach((d, i) => d.classList.toggle("on", i === Math.floor((index % 8) / 2)));
+        setTimeout(() => dots.forEach(d => d.classList.remove("on")), 90);
+      }, delay);
+    }
+
+    function createCue(arrivalTime) {
+      const type = chooseType();
+      const foot = chooseFoot();
+      const cfg = DIFFICULTY[els.difficulty.value];
+      const nowCtx = audio.currentTime;
+      const delayMs = Math.max(0, (arrivalTime - nowCtx) * 1000);
+      const expectedPerf = performance.now() + delayMs;
+      const id = ++cueId;
+
+      const note = document.createElement("div");
+      note.className = "note " + TYPES[type].className;
+      note.textContent = TYPES[type].label;
+      note.setAttribute("aria-hidden", "true");
+      els.lane.appendChild(note);
+
+      const startX = els.lane.clientWidth + 12;
+      const targetX = 30;
+      const duration = Math.max(300, delayMs);
+
+      const animation = note.animate(
+        [
+          { transform: `translateX(${startX}px) scale(.9)`, opacity: 0.35 },
+          { transform: `translateX(${targetX}px) scale(1)`, opacity: 1 }
+        ],
+        { duration, easing: "linear", fill: "forwards" }
+      );
+
+      const cue = { id, type, foot, expectedPerf, arrivalTime, note, animation, judged: false };
+      pendingCues.push(cue);
+
+      setTimeout(() => {
+        if (!running) return;
+        setCueDisplay(type, foot);
+        els.target.classList.remove("pulse");
+        void els.target.offsetWidth;
+        els.target.classList.add("pulse");
+        els.flash.style.background = TYPES[type].color;
+        els.flash.classList.remove("show");
+        void els.flash.offsetWidth;
+        els.flash.classList.add("show");
+        playCueTone(type);
+      }, delayMs);
+
+      setTimeout(() => {
+        if (!cue.judged && tapScoring && running) {
+          cue.judged = true;
+          combo = 0;
+          updateStats();
+        }
+        note.remove();
+        pendingCues = pendingCues.filter(c => c.id !== id);
+      }, delayMs + 720);
+    }
+
+    function scheduler() {
+      if (!running || !audio) return;
+
+      const bpm = Number(els.bpm.value);
+      const tickDuration = 60 / bpm / 2; // 8分音符
+      const lookAhead = 0.16;
+      const cueLookAhead = DIFFICULTY[els.difficulty.value].travel / 1000 + 0.15;
+
+      while (nextTickTime < audio.currentTime + lookAhead) {
+        playTick(nextTickTime, tickIndex);
+        animateBeat(tickIndex, nextTickTime);
+        nextTickTime += tickDuration;
+        tickIndex++;
+      }
+
+      while (nextCueTime < audio.currentTime + cueLookAhead) {
+        createCue(nextCueTime);
+        const gapTicks = randomItem(DIFFICULTY[els.difficulty.value].gaps);
+        nextCueTime += tickDuration * gapTicks;
+      }
+
+      schedulerTimer = setTimeout(scheduler, 25);
+    }
+
+    function updateStats() {
+      els.score.textContent = String(score);
+      els.combo.textContent = String(combo);
+    }
+
+    function judge(type) {
+      if (!running || !tapScoring) return;
+      const now = performance.now();
+      const candidates = pendingCues
+        .filter(c => !c.judged && Math.abs(c.expectedPerf - now) <= 650)
+        .sort((a, b) => Math.abs(a.expectedPerf - now) - Math.abs(b.expectedPerf - now));
+
+      if (!candidates.length) {
+        combo = 0;
+        updateStats();
+        showToast("タイミング外");
+        return;
+      }
+
+      const cue = candidates[0];
+      cue.judged = true;
+      const diff = Math.abs(cue.expectedPerf - now);
+
+      if (cue.type !== type) {
+        combo = 0;
+        updateStats();
+        showToast("ちがう合図");
+        return;
+      }
+
+      let add = 0;
+      let label = "";
+      if (diff <= 115) {
+        add = 100;
+        label = "PERFECT +100";
+      } else if (diff <= 240) {
+        add = 70;
+        label = "GOOD +70";
+      } else {
+        add = 35;
+        label = "OK +35";
+      }
+
+      combo++;
+      score += add + Math.min(50, combo * 2);
+      updateStats();
+      showToast(label);
+    }
+
+    async function requestWakeLock() {
+      if (els.screenMode.value !== "wake" || !("wakeLock" in navigator)) return;
+      try { wakeLock = await navigator.wakeLock.request("screen"); } catch (_) {}
+    }
+
+    async function releaseWakeLock() {
+      try { if (wakeLock) await wakeLock.release(); } catch (_) {}
+      wakeLock = null;
+    }
+
+    function clearNotes() {
+      pendingCues.forEach(c => {
+        try { c.animation.cancel(); } catch (_) {}
+        c.note.remove();
+      });
+      pendingCues = [];
+    }
+
+    function setControlsDisabled(disabled) {
+      [els.difficulty, els.duration, els.footMode, els.cueMode].forEach(el => el.disabled = disabled);
+    }
+
+    async function start() {
+      await ensureAudio();
+      running = true;
+      score = 0;
+      combo = 0;
+      cueId = 0;
+      lastType = null;
+      clearNotes();
+      updateStats();
+      setControlsDisabled(true);
+      await requestWakeLock();
+
+      const durationSec = Number(els.duration.value);
+      startPerf = performance.now();
+      endAtPerf = durationSec > 0 ? startPerf + durationSec * 1000 : Infinity;
+
+      const bpm = Number(els.bpm.value);
+      const tickDuration = 60 / bpm / 2;
+      nextTickTime = audio.currentTime + 0.10;
+      tickIndex = 0;
+
+      const travel = DIFFICULTY[els.difficulty.value].travel / 1000;
+      nextCueTime = audio.currentTime + travel + tickDuration * 2;
+
+      els.startBtn.textContent = "■ ストップ";
+      els.startBtn.classList.add("running");
+      els.cuePrefix.textContent = "準備";
+      els.footBadge.textContent = "両足";
+
+      scheduler();
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        if (!running) return;
+        const left = (endAtPerf - performance.now()) / 1000;
+        els.time.textContent = formatTime(left);
+        if (left <= 0) stop(true);
+      }, 100);
+
+      els.time.textContent = formatTime(durationSec > 0 ? durationSec : Infinity);
+    }
+
+    function stop(completed = false) {
+      if (!running) return;
+      running = false;
+      clearTimeout(schedulerTimer);
+      clearInterval(countdownTimer);
+      clearNotes();
+      releaseWakeLock();
+      setControlsDisabled(false);
+
+      els.startBtn.textContent = "▶ トレーニング開始";
+      els.startBtn.classList.remove("running");
+      els.cuePrefix.textContent = completed ? "おつかれさまでした" : "一時停止";
+      els.footBadge.textContent = "両足";
+      document.querySelectorAll(".beat-dot").forEach(d => d.classList.remove("on"));
+
+      if (completed) {
+        showToast(`終了！ スコア ${score}`);
+        if (navigator.vibrate) navigator.vibrate([90, 50, 130]);
+      }
+    }
+
+    els.startBtn.addEventListener("click", () => running ? stop(false) : start());
+
+    els.tapToggle.addEventListener("click", () => {
+      tapScoring = !tapScoring;
+      els.tapToggle.classList.toggle("on", tapScoring);
+      els.tapToggle.textContent = tapScoring ? "採点 ON" : "採点 OFF";
+      els.tapToggle.setAttribute("aria-pressed", String(tapScoring));
+      els.answerPad.style.opacity = tapScoring ? "1" : ".55";
+    });
+
+    document.querySelectorAll(".answer").forEach(btn => {
+      btn.addEventListener("pointerdown", () => judge(btn.dataset.type));
+    });
+
+    els.bpm.addEventListener("input", () => {
+      els.bpmValue.textContent = els.bpm.value;
+      localStorage.setItem("toeRhythmBpm", els.bpm.value);
+    });
+
+    ["difficulty", "duration", "footMode", "soundMode", "cueMode", "screenMode"].forEach(id => {
+      els[id].addEventListener("change", () => localStorage.setItem("toeRhythm_" + id, els[id].value));
+    });
+
+    els.helpBtn.addEventListener("click", () => els.help.classList.add("open"));
+    els.closeHelp.addEventListener("click", () => els.help.classList.remove("open"));
+    els.help.addEventListener("click", (e) => {
+      if (e.target === els.help) els.help.classList.remove("open");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        running ? stop(false) : start();
+      }
+      if (e.key === "1") judge("goo");
+      if (e.key === "2") judge("choki");
+      if (e.key === "3") judge("paa");
+    });
+
+    document.addEventListener("visibilitychange", async () => {
+      if (document.visibilityState === "visible" && running) await requestWakeLock();
+    });
+
+    // 保存済み設定を復元
+    const savedBpm = localStorage.getItem("toeRhythmBpm");
+    if (savedBpm) {
+      els.bpm.value = savedBpm;
+      els.bpmValue.textContent = savedBpm;
+    }
+    ["difficulty", "duration", "footMode", "soundMode", "cueMode", "screenMode"].forEach(id => {
+      const saved = localStorage.getItem("toeRhythm_" + id);
+      if (saved && [...els[id].options].some(o => o.value === saved)) els[id].value = saved;
+    });
+
+    els.tapToggle.classList.add("on");
+    els.time.textContent = formatTime(Number(els.duration.value));
+
+    els.duration.addEventListener("change", () => {
+      const d = Number(els.duration.value);
+      els.time.textContent = formatTime(d > 0 ? d : Infinity);
+    });
+  })();
+  </script>
+</body>
+</html>

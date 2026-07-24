@@ -1,1 +1,1 @@
-# toe-rhythm
+# foot-training
